@@ -42,10 +42,17 @@ export class BookingService {
             take(1),
             delay(1500),
             tap(bookings => {
-            this._bookings.next(bookings.concat(newBooking));
-        }));
+                this._bookings.next(bookings.concat(newBooking));
+            }));
     }
 
-    cancelBooking(bookingId: string) { }
+    cancelBooking(bookingId: string) {
+        return this.bookings.pipe(
+            take(1),
+            delay(1500),
+            tap(bookings => {
+                this._bookings.next(bookings.filter(b => b.id !== bookingId));
+            }));
+    }
 }
 

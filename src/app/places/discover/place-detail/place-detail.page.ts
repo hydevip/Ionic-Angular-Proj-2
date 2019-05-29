@@ -3,8 +3,9 @@ import { Place } from './../../place.model';
 import { PlacesService } from './../../places.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ModalController, ActionSheetController } from '@ionic/angular';
+import { NavController, ModalController, ActionSheetController, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { BookingService } from './../../../bookings/booking.service';
 
 @Component({
   selector: 'app-place-detail',
@@ -20,7 +21,9 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private navCtrl: NavController,
     private placesService: PlacesService,
     private modalCtrl: ModalController,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private bookingService: BookingService,
+    private loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
@@ -67,19 +70,39 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
 
   openBookingModal(mode: 'select' | 'random') {
     console.log(mode);
-    this.modalCtrl.create({
-      component: CreateBookingComponent,
-      componentProps: { selectedPlace: this.place, selectedMode: mode }
-    }).then(modalEl => {
-      modalEl.present();
-      return modalEl.onDidDismiss();
-    }).then(resultData => {
-      console.log(resultData.data, resultData.role);
-      if (resultData.role === 'confirm') {
-        console.log('Booked!!');
-      }
-    });
-
+    this.modalCtrl
+      .create({
+        component: CreateBookingComponent,
+        componentProps: { selectedPlace: this.place, selectedMode: mode }
+      })
+      .then(modalEl => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      })
+      .then(resultData => {
+        if (resultData.role === 'confirm') {
+          this.loadingCtrl
+            .create({ message: 'Booking place...' })
+            .then(loadingEl => {
+              loadingEl.present();
+              const data = resultData.data.bookingData;
+              this.bookingService
+                .addBooking(
+                  this.place.id,
+                  this.place.title,
+                  this.place.imageUrl,
+                  data.firstName,
+                  data.lastName,
+                  data.guestNumber,
+                  data.startDate,
+                  data.endDate
+                )
+                .subscribe(() => {
+                  loadingEl.dismiss();
+                });
+            });
+        }
+      });
   }
 
   ngOnDestroy() {
