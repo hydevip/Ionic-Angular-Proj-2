@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.ionic4.proj2.angular7;
 
 import android.os.Bundle;
 

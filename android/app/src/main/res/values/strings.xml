@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">proj2</string>
     <string name="title_activity_main">proj2</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="fileprovider_authority">io.ionic.starter.fileprovider</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="package_name">com.ionic4.proj2.angular7</string>
+    <string name="fileprovider_authority">com.ionic4.proj2.angular7.fileprovider</string>
+    <string name="custom_url_scheme">com.ionic4.proj2.angular7</string>
 </resources>
