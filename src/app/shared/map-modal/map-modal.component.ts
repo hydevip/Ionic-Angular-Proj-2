@@ -28,6 +28,15 @@ export class MapModalComponent implements OnInit, AfterViewInit {
       googleMaps.event.addListenerOnce(map, 'idle', () => {
         this.Renderer.addClass(mapEl, 'visible');
       });
+
+      map.addListenerOnce('click', event => {
+        const selectedCoords = {
+          lat: event.latlng.lat(),
+          lng: event.latlng.lng()
+        };
+        this.modalCtrl.dismiss(selectedCoords);
+      });
+
     }).catch(err => {
       console.log(err);
     });
@@ -45,7 +54,7 @@ export class MapModalComponent implements OnInit, AfterViewInit {
     }
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCpaENb7BUVR5BgCJ9Ek0qemB9VzpGRw8I';
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCGNZuEk9mItOWRJ4DZJCYktenT04uJ9n8';
       script.async = true;
       script.defer = true;
       document.body.appendChild(script);
