@@ -37,13 +37,17 @@ export class NewOfferPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required]
       }),
-      location: new FormControl(null, {validators: [Validators.required]})
+      location: new FormControl(null, { validators: [Validators.required] })
     });
   }
 
-onLocationPicked(location: PlaceLocation) {
-this.form.patchValue({location: location});
-}
+  onLocationPicked(location: PlaceLocation) {
+    this.form.patchValue({ location: location });
+  }
+
+  onImagePicked(imageData: string) {
+
+  }
 
 
   onCreateOffer() {
